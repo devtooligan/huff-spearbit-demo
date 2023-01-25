@@ -1,0 +1,46 @@
+/*
+  function collatzIteration(uint256 n) public pure override returns (uint256) {
+    if (n % 2 == 0) {
+      return n / 2;
+    } else {
+      return 3 * n + 1;
+    }
+  }
+*/
+
+#define macro MAIN() = takes (0) returns (0) {
+    // skip routing, ignore fn sig, load arg directly
+    0x04                // [0x04]
+    calldataload        // [n]
+
+    // check if n % 2 == 0
+    0x02                // [0x02, n]
+    dup2                // [n, 0x02, n]
+    mod                 // [n % 2, n]
+    iszero              // [n % 2 == 0, n]
+
+    // jump if even
+    even                // [0x11, n % 2 == 0, n]
+    jumpi               // [n]
+
+    // logic for odd case: 3 * n + 1
+    0x03                // [0x03, n]
+    mul                 // [3 * n, n]
+    0x01                // [0x01, 3 * n, n]
+    add                 // [newN = 3 * n + 1, n]
+    // jump to ret
+    ret                 // [ret, newN, n]
+    jump                // [n]
+
+    even:               // [n]
+      0x02              // [0x02, n]
+      swap1             // [n, 0x02]
+      div               // [newN = n / 2]
+
+    ret:                // [newN]
+      0x00    // [0, newN]
+      mstore            // []
+      0x20              // [0x20]
+      0x00    // [0x20, 0]
+      return
+}

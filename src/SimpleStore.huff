@@ -4,18 +4,19 @@
 
 /* Storage Slots */
 #define constant VALUE_LOCATION = FREE_STORAGE_POINTER()
+// #define constant SETVALUE_FUNC_SIG =  = 0x55241077
 
 /* Methods */
 #define macro SET_VALUE() = takes (0) returns (0) {
     0x04 calldataload   // [value]
     [VALUE_LOCATION]    // [ptr, value]
-    sstore              // []
+    sstore              // []                         // *evm.codes
 }
 
 #define macro GET_VALUE() = takes (0) returns (0) {
     // Load value from storage.
     [VALUE_LOCATION]   // [ptr]
-    sload                // [value]
+    sload              // [value]
 
     // Store value in memory.
     0x00 mstore
@@ -26,11 +27,34 @@
 
 #define macro MAIN() = takes (0) returns (0) {
     // Identify which function is being called.
-    0x00 calldataload 0xE0 shr
-    dup1 __FUNC_SIG(setValue) eq set jumpi
+
+    // 0x00 calldataload 0xE0 shr
+    0x00  // -> push1 0x0                        // [0]
+    calldataload                                 // [calldata from 0x0]                         *evm.codes
+    0xE0                                         // [224, calldata]
+    shr                                          // [sig]                                       *evm.codes
+
+    // example of calldata:
+    //  fn sig    arg1
+    // 0x55241077 0000000000000000000000000000000000000000000000000000000123456789
+    // 1st 32 bytes:
+    // 0x5524107700000000000000000000000000000000000000000000000000000001
+    // after shr 224:
+    // 0x0000000000000000000000000000000000000000000000000000000055241077 => 0x55241077
+
+
+    // dup1 __FUNC_SIG(setValue) eq set jumpi
+    dup1                                         // [sig, sig]
+    //  0x55241077  // -> push4 0x55241077
+    //  [SETVALUE_FUNC_SIG]
+    __FUNC_SIG(setValue) // -> push4 0x55241077  // [0x55241077, sig, sig]
+    eq                                           // [0x55241077 == sig, sig]
+    set                                          // [jumpdest set, 0x55241077 == sig, sig]
+    jumpi                                        // [sig]
+
     dup1 __FUNC_SIG(getValue) eq get jumpi
 
-    0x00 0x00 revert
+    0x00 0x00 revert  // *evm.codes
 
     set:
         SET_VALUE()
