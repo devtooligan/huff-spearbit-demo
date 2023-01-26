@@ -5,6 +5,8 @@ import "foundry-huff/HuffDeployer.sol";
 import "forge-std/Test.sol";
 import "forge-std/console.sol";
 
+// ADAPTED FROM QuillCTF - https://quillctf.super.site/challenges/quillctf-challenges/collatz-puzzle
+
 interface ICollatz {
   function collatzIteration(uint256 n) external pure returns (uint256);
 }
