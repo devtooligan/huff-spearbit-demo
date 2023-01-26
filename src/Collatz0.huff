@@ -20,7 +20,7 @@
     iszero              // [n % 2 == 0, n]
 
     // jump if even
-    even                // [0x11, n % 2 == 0, n]
+    even                // [even pc, n % 2 == 0, n]
     jumpi               // [n]
 
     // logic for odd case: 3 * n + 1
@@ -32,15 +32,17 @@
     ret                 // [ret, newN, n]
     jump                // [n]
 
+    // logic for even case: n / 2
     even:               // [n]
       0x02              // [0x02, n]
       swap1             // [n, 0x02]
       div               // [newN = n / 2]
 
+    // return newN
     ret:                // [newN]
-      0x00    // [0, newN]
+      0x00              // [0, newN]
       mstore            // []
       0x20              // [0x20]
-      0x00    // [0x20, 0]
+      0x00              // [0x20, 0]
       return
 }

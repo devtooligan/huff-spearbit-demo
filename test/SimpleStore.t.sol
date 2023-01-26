@@ -17,8 +17,6 @@ contract SimpleStoreTest is Test {
     /// @dev Ensure that you can set and get the value.
     function testSetAndGetValue(uint256 value) public {
         simpleStore.setValue(value);
-        console.log(value);
-        console.log(simpleStore.getValue());
         assertEq(value, simpleStore.getValue());
     }
 }

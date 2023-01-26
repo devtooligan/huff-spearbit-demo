@@ -24,11 +24,12 @@
     jumpi                            // [n]
 
     // logic for odd case:
+    // 2 * (3 * n + 1) / 2 == (6 * n + 2) / 2 == 3 * n + 1
     // note: multiply by 6 and add 2 (instead of x3 and + 1) so we can always div / 2 to skip a jump to save bytecode
     0x06                             // [0x06, n]
-    mul                              // [6 * n, n]
-    0x02                             // [0x02, 6 * n, n]
-    add                              // [6 * n + 2, n]
+    mul                              // [6 * n]
+    0x02                             // [0x02, 6 * n]
+    add                              // [6 * n + 2]
 
     even:                            // [n]
       0x02                           // [0x02, n]
