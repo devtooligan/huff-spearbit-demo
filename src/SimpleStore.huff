@@ -10,7 +10,7 @@
 #define macro SET_VALUE() = takes (0) returns (0) {
     0x04 calldataload   // [value]
     [VALUE_LOCATION]    // [ptr, value]
-    sstore              // []                         // *evm.codes
+    sstore              // []
 }
 
 #define macro GET_VALUE() = takes (0) returns (0) {
@@ -18,13 +18,13 @@
     [VALUE_LOCATION]   // [ptr]
     sload              // [value]
 
-    // Store value in memory.
+    // Store value in memory
     0x00               // [0, value]
     mstore
 
     // Return value
-    0x20
-    0x00
+    0x20               // [32]
+    0x00               // [0, 32]
     return
 }
 
@@ -34,7 +34,7 @@
 
     // 0x00 calldataload 0xE0 shr
     0x00  // -> push1 0x0                        // [0]
-    calldataload                                 // [calldata from 0x0]                         *evm.codes
+    calldataload                                 // [32 bytes of calldata from 0x0]                         *evm.codes
     0xE0                                         // [224, calldata]
     shr                                          // [sig]                                       *evm.codes
 
