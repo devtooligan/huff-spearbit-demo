@@ -57,7 +57,7 @@
     set                                          // [set pc, 0x55241077 == sig, sig]
     jumpi                                        // [sig]
 
-    dup1 __FUNC_SIG(getValue) eq get jumpi
+    __FUNC_SIG(getValue) eq get jumpi
 
     // DISCUSS:
     0x00 0x00 revert
